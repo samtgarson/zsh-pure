@@ -55,8 +55,8 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable hg bzr git
 zstyle ':vcs_info:*:*' unstagedstr '!'
 zstyle ':vcs_info:*:*' stagedstr '+'
-zstyle ':vcs_info:*:*' formats "$FX[bold]%r$FX[no-bold]/%S" "%s/%b" "%%u%c"
-zstyle ':vcs_info:*:*' actionformats "$FX[bold]%r$FX[no-bold]/%S" "%s/%b" "%u%c (%a)"
+zstyle ':vcs_info:*:*' formats "$FX[bold]%r/%S" "%F{black}%s/%F{red}%b" "%%u%c"
+zstyle ':vcs_info:*:*' actionformats "$FX[bold]%r/%S" "%F{black}%s/%F{red}%b" "%u%c (%a)"
 zstyle ':vcs_info:*:*' nvcsformats "%~" "" ""
 
 # Fastest possible way to check if repo is dirty
@@ -65,13 +65,13 @@ git_dirty() {
     # Check if we're in a git repo
     command git rev-parse --is-inside-work-tree &>/dev/null || return
     # Check if it's dirty
-    command git diff --quiet --ignore-submodules HEAD &>/dev/null; [ $? -eq 1 ] && echo "*"
+    command git diff --quiet --ignore-submodules HEAD &>/dev/null; [ $? -eq 1 ] && echo "$FX[bold]%F{yellow} ✗"
 }
 
 # Display information about the current repository
 #
 repo_information() {
-    echo "%F{blue}${vcs_info_msg_0_%%/.} %F{8}$vcs_info_msg_1_`git_dirty` $vcs_info_msg_2_%f"
+    echo "$FX[bold]%F{blue}${vcs_info_msg_0_%%/.} %F{8}$vcs_info_msg_1_`git_dirty` $vcs_info_msg_2_%f"
 }
 
 # Displays the exec time of the last command if set threshold was exceeded
